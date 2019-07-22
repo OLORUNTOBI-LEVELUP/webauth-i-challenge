@@ -5,6 +5,7 @@ const bycrpt = require("bcrypt");
 
 
 
+
 router.post('/register' ,(req, res) => {
   let userbody = req.body;
    userbody.password = bycrpt.hashSync(userbody.password, 15);
@@ -16,6 +17,11 @@ router.post('/register' ,(req, res) => {
         res.status(500).json(error)
     })
 });
+
+
+
+
+
 
 
 module.exports = router;
