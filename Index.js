@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const registerRoute = require("./routes/usersRegister")
 const loginRoute = require('./routes/userLogin')
+const usersList = require('./users/users')
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 const port = process.env.PORT || 4000
@@ -29,6 +30,7 @@ server.use(session({
   }));
 server.use('/', registerRoute);
 server.use('/', loginRoute)
+server.use('/', usersList)
 
 
 
