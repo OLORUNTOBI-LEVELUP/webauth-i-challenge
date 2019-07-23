@@ -4,13 +4,13 @@ const user = require("../database/Users/models");
 const bycrpt = require("bcrypt");
 
 router.post("/login", validateUser, validateLogin, (req, res) => {
-  const user = req.user;
+  const user = req.session.user;
   try {
-    res.status(200).json({ message: `Welcome ${user.username}!` });
+    res.status(200).json({ message: `Welcome ${user.username}! You have been successfully signed in` });
   } catch (error) {
     res
       .status(500)
-      .json("Oops! We missed that. Hang on, let's fix it together");
+      .json("You shall not pass");
   }
 });
 
@@ -23,13 +23,13 @@ function validateUser(req, res, next) {
         .status(400)
         .json({
           message:
-            "Nahhhhh! You missed the required username and/or password fields"
+            "You are missing the required username and/or password fields"
         });
     }
   } else {
     res
       .status(400)
-      .json({ message: "You must be kidding! Where is the user data?" });
+      .json({ message: "user data missing" });
   }
 }
 
@@ -39,14 +39,14 @@ function validateLogin(req, res, next) {
     .first()
     .then(user => {
       if (user && bycrpt.compareSync(password, user.password)) {
-        req.user = user;
+        req.session.user = user;
         next();
       } else {
-        res.status(401).json({ message: "Oops! Invalid Credentials" });
+        res.status(401).json({ message: "Invalid Credentials" });
       }
     })
     .catch(() => {
-      res.status(401).json({ message: "Oops! Invalid Credentials" });
+      res.status(401).json({ message: "Invalid Credentials" });
     });
 }
 
